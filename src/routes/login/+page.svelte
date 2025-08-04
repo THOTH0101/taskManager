@@ -10,15 +10,15 @@
 			.required('Password is required')
 	});
 
-	let formData = {
-		email: '',
-		password: ''
-	};
+	let formData = $state({
+		email: null,
+		password: null
+	});
 
-	let errors: any = {
-		email: '',
-		password: ''
-	};
+	let errors = $state({
+		email: null,
+		password: null
+	});
 
 	const validateForm = async () => {
 		try {
@@ -27,15 +27,17 @@
 
 			await formSchema.validate({ email, password }, { abortEarly: false });
 
-			errors = { email: '', password: '' };
+			errors = { email: null, password: null };
 			return true;
 		} catch (validationError: any) {
 			// Handle validation error
-			errors = { email: '', password: '' };
+			const updateErrors: any = { email: '', password: '' };
 
 			validationError.inner.forEach((error: any) => {
-				errors[error.path] = error.message;
+				updateErrors[error.path] = error.message;
 			});
+
+			errors = updateErrors;
 
 			return false;
 		}
@@ -49,6 +51,8 @@
 		if (!isValid) {
 			return;
 		}
+
+		console.log('logged in');
 	};
 </script>
 
@@ -81,7 +85,7 @@
 		<!-- Right Side -->
 		<div class="w-full md:w-1/3 p-4 md:p-1 flex flex-col justify-center items-center">
 			<form
-				on:submit={handleSubmit}
+				onsubmit={handleSubmit}
 				class="container w-full md:w-[400px] flex flex-col gap-y-8 bg-stone-100 px-10 pt-14 pb-14 rounded-xl shadow-lg"
 			>
 				<div>
@@ -90,34 +94,25 @@
 				<div class="flex flex-col gap-y-5">
 					<div class="w-full flex flex-col gap-1">
 						<Textbox
-							props={{
-								placeholder: 'email@example.com',
-								type: 'email',
-								name: 'email',
-								label: 'Email Address',
-								className: 'w-full rounded-full',
-								errors,
-								data: formData
-							}}
+							bind:errors
+							placeholder="email@example.com"
+							type="email"
+							name="email"
+							label="Email Address"
+							className="w-full rounded-full"
+							data={formData}
 						/>
-						{#if errors}
-							<span class="text-xs text-[#f64949fe] mt-0.5">{errors.email}</span>
-						{/if}
 					</div>
 					<div class="w-full flex flex-col gap-1">
 						<Textbox
-							props={{
-								placeholder: 'enter your password',
-								type: 'password',
-								name: 'password',
-								label: 'Password',
-								className: 'w-full rounded-full',
-								data: formData
-							}}
+							bind:errors
+							placeholder="enter your password"
+							type="password"
+							name="password"
+							label="Password"
+							className="w-full rounded-full"
+							data={formData}
 						/>
-						{#if errors}
-							<span class="text-xs text-[#f64949fe] mt-0.5">{errors.password}</span>
-						{/if}
 					</div>
 
 					<span class="text-sm text-stone-500 hover:text-blue-600 hover:underline cursor-pointer"
@@ -125,11 +120,9 @@
 					>
 
 					<Button
-						props={{
-							type: 'sumbit',
-							label: 'Submit',
-							className: 'w-full h-10 bg-blue-700 text-stone-100 rounded-full'
-						}}
+						type="sumbit"
+						label="Submit"
+						className="w-full h-10 bg-blue-700 text-stone-100 rounded-full"
 					/>
 				</div>
 			</form>

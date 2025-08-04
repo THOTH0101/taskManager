@@ -55,6 +55,10 @@ export const TASK_TYPE: any = {
 
 export const BGS: any = ['bg-blue-600', 'bg-yellow-600', 'bg-red-600', 'bg-green-600'];
 
+export const LISTS = ['TODO', 'IN PROGRESS', 'COMPLETED'];
+
+export const PRIORITY = ['HIGH', 'MEDIUM', 'NORMAL', 'LOW'];
+
 export const ICONS: any = {
 	high: RiArrowsArrowUpDoubleLine,
 	normal: BsDash,

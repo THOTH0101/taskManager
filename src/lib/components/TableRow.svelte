@@ -7,12 +7,14 @@
 	import Button from './Button.svelte';
 	import TaskColor from './TaskColor.svelte';
 	import UserInfo from './UserInfo.svelte';
+	import { createDialog } from 'svelte-headlessui';
+	import ConfirmationDialog from './ConfirmationDialog.svelte';
 
-	export let task;
+	let { task } = $props();
 
-	const deleteClicks = (id: any) => {
-		console.log('am clicked');
-	};
+	const dialog = $state(createDialog({}));
+
+	const deleteHandler = () => {};
 </script>
 
 <tr class="border-b border-stone-300 text-stone-600 hover:bg-stone-300/10">
@@ -68,19 +70,17 @@
 
 	<td class="py-2 flex gap-2 md:gap-4 justify-end">
 		<Button
-			props={{
-				label: 'Edit',
-				className: 'text-blue-600 hover:text-blue-600 sm:px-0 text-sm md:text-base',
-				type: 'button'
-			}}
+			label={'Edit'}
+			className={'text-blue-600 hover:text-blue-600 sm:px-0 text-sm md:text-base'}
+			type={'button'}
 		/>
 		<Button
-			props={{
-				label: 'Delete',
-				className: 'text-red-700 hover:text-red-500 sn-px-0 text-sm md:text-base',
-				type: 'button',
-				onClick: deleteClicks
-			}}
+			label={'Delete'}
+			className={'text-red-700 hover:text-red-500 sn-px-0 text-sm md:text-base'}
+			type={'button'}
+			onClick={dialog.open}
 		/>
 	</td>
 </tr>
+<!-- TODO -->
+<ConfirmationDialog {dialog} onClick={deleteHandler} msg={null} type={null} />

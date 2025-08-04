@@ -1,6 +1,13 @@
 <script lang="ts">
-	export let props;
-	let { placeholder, type, name, label, className, data } = props;
+	let {
+		placeholder,
+		type,
+		name,
+		label = '',
+		className = '',
+		data = null,
+		errors = $bindable()
+	} = $props();
 </script>
 
 {#if label}
@@ -12,7 +19,10 @@
 		{type}
 		{name}
 		{placeholder}
-		class={'bg-transparent px-2 py-0.5 2xl:py-1 border border-stone-300 placeholder-stone-400 outline-none text-base focus:ring-2 ring-blue-300 ' +
-			className}
+		class="bg-transparent px-2 py-0.5 2xl:py-1 border border-stone-300 placeholder-stone-400 outline-none text-base focus:ring-2 ring-blue-300 {className}"
 	/>
 </div>
+
+{#if errors}
+	<span class="text-xs text-[#f64949fe] mt-0.5">{errors[name]}</span>
+{/if}

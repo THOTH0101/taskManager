@@ -9,8 +9,12 @@
 	import TaskColor from './TaskColor.svelte';
 	import TaskDialog from './TaskDialog.svelte';
 	import UserInfo from './UserInfo.svelte';
+	import AddSubTask from './AddSubTask.svelte';
+	import { createDialog } from 'svelte-headlessui';
 
 	export let task;
+
+	const dialog = createDialog({});
 </script>
 
 <div class="w-full h-fit bg-stone-200 shadow-md p-4 rounded">
@@ -79,11 +83,12 @@
 
 	<div class="w-full pb-2">
 		<button
-			class="w-full flex gap-4 items-center text-sm text-stone-500 font-semibold disabled:cursor-not-allowed disabled:text-stone-300"
+			class="w-full flex gap-4 items-center text-sm text-stone-500 font-semibold cursor-pointer disabled:cursor-not-allowed disabled:text-stone-300"
+			onclick={dialog.open}
 		>
 			<Icon src={IoAdd} className="text-lg" />
 			<span>ADD SUBTASK</span>
 		</button>
 	</div>
-	<!-- <AddSubTask id={task._id}/> -->
+	<AddSubTask {dialog} id={task._id} />
 </div>

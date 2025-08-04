@@ -1,20 +1,10 @@
 <script lang="ts">
-	import { newDialog } from '$lib/store/store';
 	import Transition from 'svelte-transition';
 
-	let dialog: any;
-
-	newDialog.subscribe((value) => {
-		dialog = value;
-	});
+	export let dialog;
 </script>
 
-<div
-	class="relative z-60 w-full"
-	on:click={() => {
-		dialog.close;
-	}}
->
+<div class="relative z-60 w-full" onchange={() => dialog.close}>
 	<Transition show={$dialog.expanded}>
 		<Transition
 			enter="ease-out duration-300"
@@ -38,9 +28,9 @@
 				>
 					<div
 						use:dialog.modal
-						class="w-full relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all pb-0 sm:my-8 sm:w-full sm:max-w-lg"
+						class="w-full relative transform overflow-hidden rounded-lg bg-stone-200 text-left shadow-xl transition-all pb-0 sm:my-8 sm:w-full sm:max-w-lg"
 					>
-						<div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+						<div class="bg-stone-200 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
 							<div class="sm:flex sm:items-start">
 								<div class="w-full mt-3 sm:ml-4 sm:mt-0 sm:text-left">
 									<slot />

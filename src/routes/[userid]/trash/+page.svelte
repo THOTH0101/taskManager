@@ -1,36 +1,67 @@
 <script lang="ts">
-	import Button from '$lib/components/Button.svelte';
 	import { ICONS, PRIOTITYSTYLES } from '$lib';
+	import Button from '$lib/components/Button.svelte';
+	import ConfirmationDialog from '$lib/components/ConfirmationDialog.svelte';
 	import TaskColor from '$lib/components/TaskColor.svelte';
 	import Title from '$lib/components/Title.svelte';
+	import { createDialog } from 'svelte-headlessui';
 	import { Icon } from 'svelte-icons-pack';
 	import { RiSystemDeleteBin6Line } from 'svelte-icons-pack/ri';
 	import { TrOutlineRestore } from 'svelte-icons-pack/tr';
 	import { tasks } from '../../../assets/data';
+
+	let type = $state('delete');
+	let msg = $state('');
+	let selected = $state(null);
+	const dialog = $state(createDialog({}));
+
+	const deleteAllClick = () => {
+		type = 'deleteAll';
+		msg = 'Do you want to permenantly delete all items?';
+		dialog.open();
+	};
+
+	const restoreAllClick = () => {
+		type = 'restoreAll';
+		msg = 'Do you want to restore all items in the trash?';
+		dialog.open();
+	};
+
+	const deleteClick = (id: any) => {
+		type = 'delete';
+		selected = id;
+		msg = '';
+		dialog.open();
+	};
+
+	const restoreClick = (id: any) => {
+		selected = id;
+		type = 'restore';
+		msg = 'Do you want to restore the selected item?';
+		dialog.open();
+	};
+
+	const deleteRestoreHandler = () => {};
 </script>
 
 <div class="w-full md:px-1 px-0 mb-6">
 	<div class="flex items-center justify-between mb-8">
-		<Title props={{ title: 'Trashed Tasks' }} />
+		<Title title={'Trashed Tasks'} />
 
 		<div class="flex gap-2 md:gap-4 items-center">
 			<Button
-				props={{
-					label: 'Restore All',
-					icon: TrOutlineRestore,
-					iconClass: 'text-lg hidden md:flex',
-					className:
-						'flex flex-row-reverse gap-1 items-center bg-stone-200  text-stone-950 text-sm md:text-base rounded-md 2xl:py-2.5'
-				}}
+				label={'Restore All'}
+				icon={TrOutlineRestore}
+				iconClass={'text-lg hidden md:flex'}
+				className={'flex flex-row-reverse gap-1 items-center bg-stone-200  text-stone-950 text-sm md:text-base rounded-md 2xl:py-2.5'}
+				onClick={restoreAllClick}
 			/>
 			<Button
-				props={{
-					label: 'Delete All',
-					icon: RiSystemDeleteBin6Line,
-					iconClass: 'text-lg hidden md:flex',
-					className:
-						'flex flex-row-reverse gap-1 items-center bg-stone-200 text-red-600 text-sm md:text-base rounded-md 2xl:py-2.5'
-				}}
+				label={'Delete All'}
+				icon={RiSystemDeleteBin6Line}
+				iconClass={'text-lg hidden md:flex'}
+				className={'flex flex-row-reverse gap-1 items-center bg-stone-200 text-red-600 text-sm md:text-base rounded-md 2xl:py-2.5'}
+				onClick={deleteAllClick}
 			/>
 		</div>
 	</div>
@@ -72,9 +103,15 @@
 							<td class="py-2 text-sm">{new Date(task?.date).toDateString()}</td>
 
 							<td class="py-2 flex gap-1 justify-end">
-								<Button props={{ icon: TrOutlineRestore, className: 'text-xl text-stone-500' }} />
 								<Button
-									props={{ icon: RiSystemDeleteBin6Line, className: 'text-xl text-red-600' }}
+									icon={TrOutlineRestore}
+									className={'text-xl text-stone-500'}
+									onClick={() => restoreClick(task._id)}
+								/>
+								<Button
+									icon={RiSystemDeleteBin6Line}
+									className={'text-xl text-red-600'}
+									onClick={() => deleteClick(task._id)}
 								/>
 							</td>
 						</tr>
@@ -85,4 +122,4 @@
 	</div>
 </div>
 
-<!-- <AddUser open={open} setOpen={setOpen} /> -->
+<ConfirmationDialog {dialog} {msg} {type} onClick={deleteRestoreHandler} />

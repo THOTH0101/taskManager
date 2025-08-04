@@ -1,23 +1,41 @@
 <script lang="ts">
+	import { getInitials } from '$lib';
+	import AddUser from '$lib/components/AddUser.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Title from '$lib/components/Title.svelte';
+	import UserAction from '$lib/components/UserAction.svelte';
+	import { createDialog } from 'svelte-headlessui';
 	import { RiSystemAddFill } from 'svelte-icons-pack/ri';
 	import { summary } from '../../../assets/data';
-	import { getInitials } from '$lib';
 
-	let isSelect = 0;
+	let selected = $state(null);
+	const userDialog = $state(createDialog({}));
+	const dialog = $state(createDialog({}));
+
+	const deleteClick = (id: any) => {
+		selected = id;
+		userDialog.open();
+	};
+
+	const editClick = (el: any) => {
+		selected = el;
+		dialog.open();
+	};
+
+	const userActionHandler = () => {};
 </script>
 
 <div class="w-full md:px-1 px-0 mb-6">
 	<div class="flex items-center justify-between mb-8">
-		<Title props={{ title: 'Team Members' }} />
+		<Title title={'Team Members'} />
 
 		<Button
-			props={{
-				label: 'Add New User',
-				icon: RiSystemAddFill,
-				className:
-					'flex flex-row-reverse gap-1 items-center bg-blue-600 rounded-md text-stone-50 2xl:py-2.5'
+			label={'Add New User'}
+			icon={RiSystemAddFill}
+			className={'flex flex-row-reverse gap-1 items-center bg-blue-600 rounded-md text-stone-50 2xl:py-2.5'}
+			onClick={() => {
+				selected = null;
+				dialog.open();
 			}}
 		/>
 	</div>
@@ -62,19 +80,17 @@
 
 							<td class="p-2 flex gap-4 justify-end">
 								<Button
-									props={{
-										className: 'text-blue-600 hover:text-blue-500 font-semibold sm:px-0',
-										label: 'Edit',
-										type: 'button'
-									}}
+									className={'text-blue-600 hover:text-blue-500 font-semibold sm:px-0'}
+									label={'Edit'}
+									type={'button'}
+									onClick={() => editClick(user)}
 								/>
 
 								<Button
-									props={{
-										className: 'text-red-700 hover:text-red-500 font-semibold sm:px-0',
-										label: 'Delete',
-										type: 'button'
-									}}
+									className={'text-red-700 hover:text-red-500 font-semibold sm:px-0'}
+									label={'Delete'}
+									type={'button'}
+									onClick={() => deleteClick(user._id)}
 								/>
 							</td>
 						</tr>
@@ -84,3 +100,6 @@
 		</div>
 	</div>
 </div>
+
+<UserAction dialog={userDialog} onClick={userActionHandler} />
+<AddUser {dialog} userData={selected} />

@@ -24,5 +24,3 @@
 		</table>
 	</div>
 </div>
-<!-- TODO -->
-<!-- <ConfirmationDialog onClick={deleteHandler}/> -->

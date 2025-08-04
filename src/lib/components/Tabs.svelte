@@ -1,17 +1,10 @@
 <script lang="ts">
-	import { selected } from '$lib/store/store';
 	import { createTabs } from 'svelte-headlessui';
 	import { Icon } from 'svelte-icons-pack';
-	import { get } from 'svelte/store';
 
-	export let tabs;
+	let { tabs, tabContent, selectedTab = $bindable() } = $props();
 
 	const tab = createTabs();
-	let selectedTab = 0;
-
-	selected.subscribe(() => {
-		selectedTab = get(selected);
-	});
 </script>
 
 <div class="w-full px-1 sm:px-0">
@@ -23,8 +16,8 @@
 					(selectedTab == index
 						? 'text-blue-700 border-b-2 border-blue-600'
 						: 'text-stone-800 hover:text-blue-800')}
-				on:click={() => {
-					selected.set(index);
+				onclick={() => {
+					selectedTab = index;
 				}}
 			>
 				<Icon src={tb.icon} />
@@ -33,6 +26,8 @@
 		{/each}
 	</div>
 	<div use:tab.panel class="w-full mt-2">
-		<slot />
+		{#if tabContent}
+			{@render tabContent()}
+		{/if}
 	</div>
 </div>

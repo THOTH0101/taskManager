@@ -92,7 +92,7 @@
 								<Icon src={ICONS[item.notiType]} size="24" />
 							</div>
 
-							<div class="cursor-pointer" on:click={() => viewHandler(item)}>
+							<div class="cursor-pointer" onclick={() => viewHandler(item)}>
 								<div class="flex items-center gap-3 font-semibold text-stone-900 capitalize">
 									<p>{item.notiType}</p>
 									<span class="text-xs font-normal lowercase">
@@ -112,7 +112,7 @@
 								id={action.name}
 								href={action.href}
 								class="flex items-center gap-x-2.5 p-3 font-semibold text-blue-600 hover:bg-stone-100"
-								on:click={action.onClick ? action.onClick : popover.close}>{action.name}</a
+								onclick={action.onClick ? action.onClick : popover.close}>{action.name}</a
 							>
 						{/each}
 					</div>
